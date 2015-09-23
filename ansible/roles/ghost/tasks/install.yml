@@ -1,0 +1,23 @@
+---
+- name: install unzip
+  apt: name=unzip state=present update_cache=yes
+
+- name: fetch ghost
+  get_url: url=https://github.com/TryGhost/Ghost/releases/download/{{ ghost_version }}/Ghost-{{ ghost_version }}.zip dest=/tmp/ghost.zip
+  become: yes
+  become_user: "{{ ghost_user }}"
+
+- name: create ghost directory
+  file: path={{ ghost_location }} state=directory
+  become: yes
+  become_user: "{{ ghost_user }}"
+
+- name: extract ghost
+  unarchive: src=/tmp/ghost.zip dest={{ ghost_location }} copy=no
+  become: yes
+  become_user: "{{ ghost_user }}"
+
+- name: install ghost dependencies
+  command: npm install --production chdir={{ ghost_location }}
+  become: yes
+  become_user: "{{ ghost_user }}"

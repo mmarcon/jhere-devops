@@ -1,0 +1,3 @@
+nodejs_version: stable
+nodejs_packages: []
+nodejs_packages_state: present

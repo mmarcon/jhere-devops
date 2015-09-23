@@ -1,0 +1,17 @@
+---
+- name: install git and build-essential
+  apt:
+    pkg: "{{ item }}"
+    state: present
+  with_items:
+    - git
+    - build-essential
+
+- name: fetch n
+  git: repo=https://github.com/tj/n.git dest=/tmp/n
+
+- name: install n
+  command: make chdir=/tmp/n
+
+- name: install node
+  command: n {{ nodejs_version }}
