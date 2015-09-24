@@ -1,5 +1,8 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
+#
+# Run: vagrant plugin install landrush
+# for the DNS plugin
 
 Vagrant.configure(2) do |config|
 
@@ -19,4 +22,7 @@ Vagrant.configure(2) do |config|
   config.vm.provision :ansible do |ansible|
     ansible.playbook = "playbook.yml"
   end
+
+  config.vm.hostname = "beta.jhere.net"
+  config.landrush.enabled = true
 end

@@ -47,10 +47,14 @@
       become_user: apps
       ignore_errors: yes
     - name: start node app
-      command: pm2 start {{ item }}
+      command: pm2 start {{ item }} --name ghost -- --production
       become: yes
       become_user: apps
       with_items: pm2_apps
+    - name: save pm2 processes
+      command: pm2 save
+      become: yes
+      become_user: apps
     - name: installing startup script
       command: pm2 startup ubuntu -u apps
       environment:
