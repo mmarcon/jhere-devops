@@ -4,3 +4,8 @@
   tags:
     - web
     - ghost
+
+- include: config.yml
+  tags:
+    - web
+    - ghost

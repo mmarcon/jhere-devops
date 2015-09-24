@@ -1,0 +1,6 @@
+---
+- name: upload config file
+  copy: src={{ ghost_config }} dest={{ ghost_location }}/config.js
+  become: yes
+  become_user: "{{ ghost_user }}"
+  when: ghost_location is defined

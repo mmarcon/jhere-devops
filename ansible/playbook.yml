@@ -10,6 +10,8 @@
     ghost_version: "0.7.0"
     ghost_user: apps
     ghost_location: /var/apps/ghost-{{ ghost_version }}
+    ghost_config: ./ghost/config.prod.js
+    ghost_theme: https://github.com/mmarcon/ghost-jhere-beta/archive/master.zip
 
     # list of apps to be managed by pm2
     pm2_apps:
@@ -40,6 +42,16 @@
       notify:
         - restart nginx
 
+    #ghost theme
+    - name: fetch theme
+      get_url: url=https://github.com/mmarcon/ghost-jhere-beta/archive/master.zip dest=/tmp/jhere-beta.zip
+      become: yes
+      become_user: "{{ ghost_user }}"
+    - name: extract theme
+      unarchive: src=/tmp/jhere-beta.zip dest={{ ghost_location }}/content/themes copy=no
+      become: yes
+      become_user: "{{ ghost_user }}"
+
     #pm2
     - name: stop node apps
       command: pm2 delete all
@@ -47,10 +59,12 @@
       become_user: apps
       ignore_errors: yes
     - name: start node app
-      command: pm2 start {{ item }} --name ghost -- --production
+      command: pm2 start {{ item }} --name ghost
       become: yes
       become_user: apps
       with_items: pm2_apps
+      environment:
+        NODE_ENV: production
     - name: save pm2 processes
       command: pm2 save
       become: yes

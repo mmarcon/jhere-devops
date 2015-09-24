@@ -20,9 +20,12 @@ Vagrant.configure(2) do |config|
   end
 
   config.vm.provision :ansible do |ansible|
-    ansible.playbook = "playbook.yml"
+    ansible.playbook = "ansible/playbook.yml"
+    ansible.extra_vars = {
+        ghost_config: "./ghost/config.vagrant.js"
+    }
   end
 
-  config.vm.hostname = "beta.jhere.net"
+  config.vm.hostname = "jhere.vagrant.dev"
   config.landrush.enabled = true
 end
