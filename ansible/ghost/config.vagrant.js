@@ -12,7 +12,16 @@ config = {
     // Configure your URL and mail settings here
     production: {
         url: 'http://jhere.vagrant.dev',
-        mail: {},
+        mail: {
+            transport: 'SMTP',
+            options: {
+                service: 'Mailgun',
+                auth: {
+                    user: 'MAILGUN_USERNAME',
+                    pass: 'MAILGUN_PASSWORD'
+                }
+            }
+        },
         database: {
             client: 'sqlite3',
             connection: {

@@ -3,4 +3,16 @@
   copy: src={{ ghost_config }} dest={{ ghost_location }}/config.js
   become: yes
   become_user: "{{ ghost_user }}"
-  when: ghost_location is defined
+  when: ghost_config is defined
+
+- name: configure email (username)
+  replace: dest={{ ghost_location }}/config.js regexp='MAILGUN_USERNAME' replace={{ mailgun_username }}
+  become: yes
+  become_user: "{{ ghost_user }}"
+  when: mailgun_username is defined
+
+- name: configure email (password)
+  replace: dest={{ ghost_location }}/config.js regexp='MAILGUN_PASSWORD' replace={{ mailgun_password }}
+  become: yes
+  become_user: "{{ ghost_user }}"
+  when: mailgun_password is defined

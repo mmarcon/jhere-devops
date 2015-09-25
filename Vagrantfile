@@ -24,6 +24,7 @@ Vagrant.configure(2) do |config|
     ansible.extra_vars = {
         ghost_config: "./ghost/config.vagrant.js"
     }
+    ansible.ask_vault_pass = true
   end
 
   config.vm.hostname = "jhere.vagrant.dev"
