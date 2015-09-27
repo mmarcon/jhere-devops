@@ -17,7 +17,7 @@
     pm2_apps:
       - "/var/apps/ghost-{{ ghost_version }}/index.js"
   vars_files:
-    - mailgun.yml
+    - vaults/mailgun.yml
 
   roles:
     - nodejs

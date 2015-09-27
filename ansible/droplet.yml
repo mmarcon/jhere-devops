@@ -1,0 +1,18 @@
+---
+- hosts: localhost
+  connection: local
+  gather_facts: false
+  vars_files:
+    - vaults/digital_ocean.yml
+
+  tasks:
+    - name: Create new DO Droplet
+      digital_ocean: >
+        state=present
+        ssh_key_ids=1498174
+        name=jhere-beta
+        api_token={{ do_api_token }}
+        size_id=512mb
+        region_id=nyc1
+        image_id=ubuntu-14-04-x64
+        backups_enabled=no
