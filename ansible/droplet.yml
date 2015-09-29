@@ -16,3 +16,6 @@
         region_id=nyc1
         image_id=ubuntu-14-04-x64
         backups_enabled=no
+      register: droplet
+    - name: Print IP address
+      debug: msg="Droplet IP is {{ droplet.droplet.ip_address }}"
