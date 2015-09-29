@@ -25,20 +25,20 @@ function success(message) {
 
 //The arguments file
 var argumentsFile = process.argv[2];
-var arguments = fs.readFileSync(argumentsFile, {encoding: 'utf8'});
-var parsedArguments = {};
-arguments.split(' ').forEach(function(kv) {
+var args = fs.readFileSync(argumentsFile, {encoding: 'utf8'});
+var parsedArgs = {};
+args.split(' ').forEach(function(kv) {
     kv = kv.split('=');
-    parsedArguments[kv[0]] = kv[1];
+    parsedArgs[kv[0]] = kv[1];
 });
 
 //Default command is 'droplet'
-parsedArguments.command = parsedArguments.command || 'droplet';
+parsedArgs.command = parsedArgs.command || 'droplet';
 
-switch (parsedArguments.command) {
+switch (parsedArgs.command) {
     case 'droplet':
         success('droplet created');
         break;
     default:
-        failure('command ' + parsedArguments.command + ' not supported');
+        failure('command ' + parsedArgs.command + ' not supported');
 }
