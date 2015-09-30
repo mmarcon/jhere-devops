@@ -69,6 +69,6 @@ IP of the droplets using the DigitalOcean API – pretty cool stuff.
 
 To apply the configuration run:
 
-    $ ansible-playbook playbook.yml -i inventories/dohosts --ask-vault-pass
+    $ ansible-playbook playbook.yml -u root -i inventories/dohosts --ask-vault-pass
 
 Ansible will ask for the password that decrypts the vault files.
