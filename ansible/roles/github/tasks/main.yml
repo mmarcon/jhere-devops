@@ -1,0 +1,7 @@
+---
+
+- include: prerequisites.yml
+
+- include: get.yml
+  tags:
+    - github

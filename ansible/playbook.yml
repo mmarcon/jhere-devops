@@ -13,6 +13,10 @@
     ghost_config: ./ghost/config.prod.js
     ghost_theme: https://github.com/mmarcon/ghost-jhere-beta/archive/master.zip
 
+    github_url: https://github.com/mmarcon/jhere/branches/jsla3/dist/examples
+    github_dest: /var/apps/jhere-examples
+    github_files_owner: apps
+
     # list of apps to be managed by pm2
     pm2_apps:
       - "/var/apps/ghost-{{ ghost_version }}/index.js"
@@ -22,6 +26,7 @@
   roles:
     - nodejs
     - ghost
+    - github
 
   pre_tasks:
     - name: create apps group

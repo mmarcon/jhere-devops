@@ -1,0 +1,9 @@
+---
+- name: install subversion
+  apt:
+    pkg: "{{ item }}"
+    state: present
+    update_cache: yes
+  with_items:
+    - subversion
+  when: github_url is defined and github_dest is defined
