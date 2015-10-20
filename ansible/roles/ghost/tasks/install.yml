@@ -1,7 +1,4 @@
 ---
-- name: install unzip
-  apt: name=unzip state=present update_cache=yes
-
 - name: fetch ghost
   get_url: url=https://github.com/TryGhost/Ghost/releases/download/{{ ghost_version }}/Ghost-{{ ghost_version }}.zip dest=/tmp/ghost.zip
   become: yes

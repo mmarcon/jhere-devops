@@ -1,0 +1,6 @@
+---
+- name: install unzip
+  apt: name=unzip state=present update_cache=yes
+
+- name: install jq
+  apt: name=jq state=present update_cache=yes
