@@ -1,20 +1,28 @@
 ---
+- name: detect ghost
+  command: jq -r .version {{ ghost_location }}/package.json
+  register: version
+
 - name: fetch ghost
   get_url: url=https://github.com/TryGhost/Ghost/releases/download/{{ ghost_version }}/Ghost-{{ ghost_version }}.zip dest=/tmp/ghost.zip
   become: yes
   become_user: "{{ ghost_user }}"
+  when: version.stdout != "{{ ghost_version }}"
 
 - name: create ghost directory
   file: path={{ ghost_location }} state=directory
   become: yes
   become_user: "{{ ghost_user }}"
+  when: version.stdout != "{{ ghost_version }}"
 
 - name: extract ghost
   unarchive: src=/tmp/ghost.zip dest={{ ghost_location }} copy=no
   become: yes
   become_user: "{{ ghost_user }}"
+  when: version.stdout != "{{ ghost_version }}"
 
 - name: install ghost dependencies
   command: npm install --production chdir={{ ghost_location }}
   become: yes
   become_user: "{{ ghost_user }}"
+  when: version.stdout != "{{ ghost_version }}"
