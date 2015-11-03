@@ -1,0 +1,8 @@
+{
+    "url": "https://api.github.com",
+    "path": "/gists",
+    "qs" : {
+        "client_id":"GITHUB_CLIENT_ID",
+        "client_secret":"GITHUB_CLIENT_SECRET"
+    }
+}

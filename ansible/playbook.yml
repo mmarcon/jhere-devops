@@ -17,9 +17,14 @@
     github_dest: /var/apps/jhere-examples
     github_files_owner: apps
 
+    map_playground: https://github.com/thingsinjars/map-playground/archive/master.zip
+    map_playground_config: ./map-playground/config.prod.json
+
     # list of apps to be managed by pm2
     pm2_apps:
-      - "/var/apps/ghost-{{ ghost_version }}/index.js"
+      - { path: "/var/apps/ghost-{{ ghost_version }}/index.js", name: "ghost" }
+      - { path: "/var/apps/map-playground-master/server.js", name: "playground" }
+
   vars_files:
     - vaults/mailgun.yml
 
@@ -51,7 +56,7 @@
 
     #ghost theme
     - name: fetch theme
-      get_url: url=https://github.com/mmarcon/ghost-jhere-beta/archive/master.zip dest=/tmp/jhere-beta.zip
+      get_url: url={{ghost_theme}} dest=/tmp/jhere-beta.zip
       become: yes
       become_user: "{{ ghost_user }}"
     - name: extract theme
@@ -59,14 +64,37 @@
       become: yes
       become_user: "{{ ghost_user }}"
 
+    #playground
+    - name: fetch playground
+      get_url: url={{map_playground}} dest=/tmp/map-playground.zip
+      become: yes
+      become_user: "{{ ghost_user }}"
+    - name: extract playground
+      unarchive: src=/tmp/map-playground.zip dest=/var/apps copy=no
+      become: yes
+      become_user: "{{ ghost_user }}"
+    - name: install playground dependencies
+      command: npm install chdir=/var/apps/map-playground-master
+      become: yes
+      become_user: "{{ ghost_user }}"
+    - name: configure playground
+      copy: src={{ map_playground_config }} dest=/var/apps/map-playground-master/config.json
+      become: yes
+      become_user: "{{ ghost_user }}"
+
     #pm2
     - name: stop node apps
+      command: pm2 kill
+      become: yes
+      become_user: apps
+      ignore_errors: yes
+    - name: delete node apps
       command: pm2 delete all
       become: yes
       become_user: apps
       ignore_errors: yes
     - name: start node app
-      command: pm2 start {{ item }} --name ghost
+      command: pm2 start {{ item.path }} --name {{ item.name }}
       become: yes
       become_user: apps
       with_items: pm2_apps
