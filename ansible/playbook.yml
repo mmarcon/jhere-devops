@@ -19,14 +19,16 @@
 
     map_playground: https://github.com/thingsinjars/map-playground/archive/master.zip
     map_playground_config: ./map-playground/config.prod.json
+    map_playground_processes: ./map-playground/processes.json
 
     # list of apps to be managed by pm2
     pm2_apps:
       - { path: "/var/apps/ghost-{{ ghost_version }}/index.js", name: "ghost" }
-      - { path: "/var/apps/map-playground-master/server.js", name: "playground" }
+      - { path: "/var/apps/map-playground-master/processes.json", name: "map-playground" }
 
   vars_files:
     - vaults/mailgun.yml
+    - vaults/github.yml
 
   roles:
     - nodejs
@@ -78,9 +80,23 @@
       become: yes
       become_user: "{{ ghost_user }}"
     - name: configure playground
-      copy: src={{ map_playground_config }} dest=/var/apps/map-playground-master/config.json
+      copy: src={{ map_playground_config }} dest=/var/apps/map-playground-master/dist/config.json
       become: yes
       become_user: "{{ ghost_user }}"
+    - name: copy pm2 setup
+      copy: src={{ map_playground_processes }} dest=/var/apps/map-playground-master/processes.json
+      become: yes
+      become_user: "{{ ghost_user }}"
+    - name: configure client id
+      replace: dest=/var/apps/map-playground-master/dist/config.json regexp='GITHUB_CLIENT_ID' replace={{ github_client_id }}
+      become: yes
+      become_user: "{{ ghost_user }}"
+      when: github_client_id is defined
+    - name: configure client secret
+      replace: dest=/var/apps/map-playground-master/dist/config.json regexp='GITHUB_CLIENT_SECRET' replace={{ github_client_secret }}
+      become: yes
+      become_user: "{{ ghost_user }}"
+      when: github_client_secret is defined
 
     #pm2
     - name: stop node apps

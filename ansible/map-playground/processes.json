@@ -1,0 +1,6 @@
+
+{
+    "name": "map-playground",
+    "cwd": "/var/apps/map-playground-master/",
+    "script": "dist/server.js"
+}
