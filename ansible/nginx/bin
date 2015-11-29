@@ -1,0 +1,5 @@
+server {
+    listen 80;
+    server_name bin.jhere.net;
+    return 301 $scheme://beta.jhere.net/bin$request_uri;
+}
