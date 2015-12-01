@@ -26,6 +26,10 @@
       - { path: "/var/apps/ghost-{{ ghost_version }}/index.js", name: "ghost" }
       - { path: "/var/apps/map-playground-master/processes.json", name: "map-playground" }
 
+    nginx_sites:
+      - default
+      - bin
+
   vars_files:
     - vaults/mailgun.yml
     - vaults/github.yml
@@ -53,6 +57,11 @@
       copy: src={{ item }} dest=/etc/nginx/sites-available/
       with_fileglob:
         - ./nginx/*
+      notify:
+        - restart nginx
+    - name: enable sites
+      file: src=/etc/nginx/sites-available/{{item}} dest=/etc/nginx/sites-enabled/{{item}} state=link
+      with_items: nginx_sites
       notify:
         - restart nginx
 
